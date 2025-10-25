@@ -1,275 +1,240 @@
-
+<!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8" />
-<meta name="viewport" content="width=device-width,initial-scale=1" />
-<title>Pokémon Card Market</title>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Pokémon Card POS</title>
 <style>
   body {
     font-family: Arial, sans-serif;
     background-color: white;
-    padding: 20px;
+    color: black;
     text-align: center;
-    color: #222;
+    margin: 20px;
   }
 
-  h2 { margin-bottom: 10px; }
-
-  table.main, table.change {
-    margin: 0 auto 12px auto;
+  table {
+    margin: 0 auto 20px;
     border-collapse: collapse;
-    width: 320px;
-    max-width: 92vw;
-  }
-  table.main th, table.main td,
-  table.change th, table.change td {
-    border: 1px solid #ddd;
-    padding: 8px;
-    vertical-align: middle;
-    text-align: left;
-  }
-  table.main th, table.change th {
-    text-align: center;
-    background: #f8f8f8;
   }
 
-  input[type="number"] { width: 72px; padding: 6px; font-size: 1rem; text-align: center; }
+  th, td {
+    padding: 8px 12px;
+    border: 1px solid #ccc;
+    font-size: 1.2em;
+  }
 
-  .total {
+  td.price {
+    color: white;
     font-weight: bold;
-    margin-top: 10px;
-    font-size: 1.15em;
   }
 
-  .price-white { background-color: #ffffff; }
-  .price-red   { background-color: #ffebeb; }
-  .price-black { background-color: #eeeeee; color: #000; }
-  .price-green { background-color: #eefbee; }
-  .price-blue  { background-color: #eef6ff; }
+  td.price.white { background: white; color: black; }
+  td.price.red { background: red; }
+  td.price.black { background: black; }
+  td.price.green { background: green; }
+  td.price.blue { background: blue; }
 
-  .change-section { margin-top: 20px; }
-  .denom-cell { display: flex; align-items: center; gap: 8px; }
+  input[type="number"] {
+    width: 60px;
+    font-size: 1.1em;
+    text-align: center;
+  }
 
-  .icon { flex: 0 0 auto; }
+  button {
+    font-size: 1.2em;
+    padding: 8px 16px;
+    margin-top: 10px;
+  }
 
-  /* Bills: consistent green */
-  .bill { width: 40px; height: 26px; }
+  #totalDisplay {
+    font-size: 1.5em;
+    margin-top: 10px;
+  }
 
-  /* Coins: scale relatively */
-  .quarter { width: 36px; height: 36px; }
-  .nickel  { width: 30px; height: 30px; }
-  .penny   { width: 28px; height: 28px; }
-  .dime    { width: 24px; height: 24px; }
+  #moneyOwed {
+    font-size: 1.5em;
+    margin: 10px;
+    font-weight: bold;
+  }
 
-  button { margin-top: 12px; padding: 8px 14px; font-size: 1rem; cursor: pointer; }
+  #changeSection {
+    display: none;
+    margin-top: 20px;
+  }
 
-  #changeBox { display: inline-block; margin-top: 8px; padding: 8px 12px; border-radius: 6px; }
-  .change-green { background: #4CAF50; color: #fff; }
-  .change-red { background: #E74C3C; color: #fff; }
+  .svg-money {
+    width: 60px;
+    vertical-align: middle;
+  }
+
+  .coin {
+    display: inline-block;
+    border-radius: 50%;
+    background: silver;
+    text-align: center;
+    color: black;
+    font-weight: bold;
+  }
+
+  .coin.quarter { width: 40px; height: 40px; line-height: 40px; font-size: 0.9em; }
+  .coin.dime { width: 28px; height: 28px; line-height: 28px; font-size: 0.8em; }
+  .coin.nickel { width: 32px; height: 32px; line-height: 32px; font-size: 0.85em; }
+  .coin.penny { width: 36px; height: 36px; line-height: 36px; font-size: 0.9em; background: #b87333; color: white; }
+
+  #changeBreakdown div {
+    margin: 4px 0;
+    font-size: 1.2em;
+  }
 </style>
 </head>
 <body>
 
-<h2>Pokémon Card Market</h2>
+<h1>Pokémon Card POS</h1>
 
-<!-- Prices -->
-<table class="main">
-  <tr><th>Price</th><th>Quantity</th></tr>
-  <tr><td class="price-white">$0.25</td><td><input type="number" id="q25" min="0" placeholder=""></td></tr>
-  <tr><td class="price-red">$0.50</td><td><input type="number" id="q50" min="0" placeholder=""></td></tr>
-  <tr><td class="price-black">$1.00</td><td><input type="number" id="q100" min="0" placeholder=""></td></tr>
-  <tr><td class="price-green">$2.00</td><td><input type="number" id="q200" min="0" placeholder=""></td></tr>
-  <tr><td class="price-blue">$5.00</td><td><input type="number" id="q500" min="0" placeholder=""></td></tr>
+<table>
+  <tr><th>Qty</th><th>Price</th></tr>
+  <tr><td><input type="number" min="0"></td><td class="price white">$0.25</td></tr>
+  <tr><td><input type="number" min="0"></td><td class="price red">$0.50</td></tr>
+  <tr><td><input type="number" min="0"></td><td class="price black">$1.00</td></tr>
+  <tr><td><input type="number" min="0"></td><td class="price green">$2.00</td></tr>
+  <tr><td><input type="number" min="0"></td><td class="price blue">$5.00</td></tr>
 </table>
 
-<div id="total" class="total">Total: $0.00</div>
+<div id="totalDisplay">Total: $0.00</div>
+<div id="moneyOwed" style="color:red;">Money Owed: $0.00</div>
+<button id="clearAll">Clear</button>
 
-<!-- Change Maker -->
-<div class="change-section">
-  <h3>Change Maker</h3>
+<hr style="margin:20px 0;">
 
-  <table class="change">
-    <tr><th>Denomination</th><th>Quantity</th></tr>
-
-    <!-- $20 -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon bill" viewBox="0 0 160 96">
-            <rect x="6" y="12" width="148" height="72" rx="10" ry="10"
-              fill="#79c48c" stroke="#5ea972" stroke-width="6"/>
-            <text x="80" y="58" font-size="36" font-family="Verdana" font-weight="700"
-              text-anchor="middle" fill="#0b3b17">$20</text>
-          </svg>
-          <span>$20</span>
-        </div>
-      </td>
-      <td><input type="number" id="b20" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- $10 -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon bill" viewBox="0 0 160 96">
-            <rect x="6" y="12" width="148" height="72" rx="10" ry="10"
-              fill="#79c48c" stroke="#5ea972" stroke-width="6"/>
-            <text x="80" y="58" font-size="34" font-family="Verdana" font-weight="700"
-              text-anchor="middle" fill="#0b3b17">$10</text>
-          </svg>
-          <span>$10</span>
-        </div>
-      </td>
-      <td><input type="number" id="b10" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- $5 -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon bill" viewBox="0 0 160 96">
-            <rect x="6" y="12" width="148" height="72" rx="10" ry="10"
-              fill="#79c48c" stroke="#5ea972" stroke-width="6"/>
-            <text x="80" y="58" font-size="34" font-family="Verdana" font-weight="700"
-              text-anchor="middle" fill="#0b3b17">$5</text>
-          </svg>
-          <span>$5</span>
-        </div>
-      </td>
-      <td><input type="number" id="b5" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- $1 -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon bill" viewBox="0 0 160 96">
-            <rect x="6" y="12" width="148" height="72" rx="10" ry="10"
-              fill="#79c48c" stroke="#5ea972" stroke-width="6"/>
-            <text x="80" y="58" font-size="34" font-family="Verdana" font-weight="700"
-              text-anchor="middle" fill="#0b3b17">$1</text>
-          </svg>
-          <span>$1</span>
-        </div>
-      </td>
-      <td><input type="number" id="b1" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- 25¢ quarter -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon quarter" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="45" fill="#d1d3d4" stroke="#9fa2a3" stroke-width="5"/>
-            <text x="50" y="58" text-anchor="middle" font-size="20" font-family="Verdana"
-              font-weight="700" fill="#2b2b2b">25¢</text>
-          </svg>
-          <span>25¢</span>
-        </div>
-      </td>
-      <td><input type="number" id="c25" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- 10¢ dime -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon dime" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="32" fill="#f0f4f6" stroke="#bfc6cc" stroke-width="5"/>
-            <text x="50" y="58" text-anchor="middle" font-size="16" font-family="Verdana"
-              font-weight="700" fill="#2b2b2b">10¢</text>
-          </svg>
-          <span>10¢</span>
-        </div>
-      </td>
-      <td><input type="number" id="c10" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- 5¢ nickel -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon nickel" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="38" fill="#d4d7d9" stroke="#9aa0a5" stroke-width="5"/>
-            <text x="50" y="58" text-anchor="middle" font-size="16" font-family="Verdana"
-              font-weight="700" fill="#1f1f1f">5¢</text>
-          </svg>
-          <span>5¢</span>
-        </div>
-      </td>
-      <td><input type="number" id="c5" min="0" placeholder=""></td>
-    </tr>
-
-    <!-- 1¢ penny -->
-    <tr>
-      <td>
-        <div class="denom-cell">
-          <svg class="icon penny" viewBox="0 0 100 100">
-            <circle cx="50" cy="50" r="36" fill="#d46a28" stroke="#9a3e10" stroke-width="5"/>
-            <text x="50" y="58" text-anchor="middle" font-size="16" font-family="Verdana"
-              font-weight="700" fill="#fff">1¢</text>
-          </svg>
-          <span>1¢</span>
-        </div>
-      </td>
-      <td><input type="number" id="c1" min="0" placeholder=""></td>
-    </tr>
-  </table>
-
-  <div id="changeBox" aria-live="polite"></div>
+<h2>Money Received</h2>
+<div id="moneyInputs">
+  <div>
+    <svg class="svg-money" viewBox="0 0 100 50">
+      <rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/>
+      <text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$20</text>
+    </svg>
+    × <input type="number" min="0" data-value="20">
+  </div>
+  <div>
+    <svg class="svg-money" viewBox="0 0 100 50">
+      <rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/>
+      <text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$10</text>
+    </svg>
+    × <input type="number" min="0" data-value="10">
+  </div>
+  <div>
+    <svg class="svg-money" viewBox="0 0 100 50">
+      <rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/>
+      <text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$5</text>
+    </svg>
+    × <input type="number" min="0" data-value="5">
+  </div>
+  <div>
+    <svg class="svg-money" viewBox="0 0 100 50">
+      <rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/>
+      <text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$1</text>
+    </svg>
+    × <input type="number" min="0" data-value="1">
+  </div>
+  <div><span class="coin quarter">25¢</span> × <input type="number" min="0" data-value="0.25"></div>
+  <div><span class="coin dime">10¢</span> × <input type="number" min="0" data-value="0.10"></div>
+  <div><span class="coin nickel">5¢</span> × <input type="number" min="0" data-value="0.05"></div>
+  <div><span class="coin penny">1¢</span> × <input type="number" min="0" data-value="0.01"></div>
 </div>
 
-<button onclick="clearAll()">Clear</button>
+<div id="changeSection">
+  <h2>Change to Give</h2>
+  <div id="changeBreakdown"></div>
+</div>
 
 <script>
+const itemRows = document.querySelectorAll("table tr");
+const totalDisplay = document.getElementById("totalDisplay");
+const moneyOwed = document.getElementById("moneyOwed");
+const changeSection = document.getElementById("changeSection");
+const changeBreakdown = document.getElementById("changeBreakdown");
+const clearAll = document.getElementById("clearAll");
+const moneyInputs = document.querySelectorAll("#moneyInputs input");
+
 function calculateTotal() {
-  const q25 = parseFloat(document.getElementById('q25').value) || 0;
-  const q50 = parseFloat(document.getElementById('q50').value) || 0;
-  const q100 = parseFloat(document.getElementById('q100').value) || 0;
-  const q200 = parseFloat(document.getElementById('q200').value) || 0;
-  const q500 = parseFloat(document.getElementById('q500').value) || 0;
-  const total = q25*0.25 + q50*0.5 + q100*1 + q200*2 + q500*5;
-  document.getElementById('total').textContent = "Total: $" + total.toFixed(2);
+  let total = 0;
+  itemRows.forEach(row => {
+    const input = row.querySelector("input");
+    const priceCell = row.querySelector(".price");
+    if (input && priceCell) {
+      const qty = parseFloat(input.value) || 0;
+      const price = parseFloat(priceCell.textContent.replace("$", ""));
+      total += qty * price;
+    }
+  });
+  totalDisplay.textContent = `Total: $${total.toFixed(2)}`;
   return total;
 }
 
-function calculateChange() {
+function calculateReceived() {
+  let received = 0;
+  moneyInputs.forEach(input => {
+    const count = parseFloat(input.value) || 0;
+    const val = parseFloat(input.dataset.value);
+    received += count * val;
+  });
+  return received;
+}
+
+function calculateChangeDue() {
   const total = calculateTotal();
-  const b20 = parseFloat(document.getElementById('b20').value) || 0;
-  const b10 = parseFloat(document.getElementById('b10').value) || 0;
-  const b5  = parseFloat(document.getElementById('b5').value)  || 0;
-  const b1  = parseFloat(document.getElementById('b1').value)  || 0;
-  const c25 = parseFloat(document.getElementById('c25').value) || 0;
-  const c10 = parseFloat(document.getElementById('c10').value) || 0;
-  const c5  = parseFloat(document.getElementById('c5').value)  || 0;
-  const c1  = parseFloat(document.getElementById('c1').value)  || 0;
-
-  const received = b20*20 + b10*10 + b5*5 + b1*1 + c25*0.25 + c10*0.1 + c5*0.05 + c1*0.01;
+  const received = calculateReceived();
   const diff = received - total;
-  const box = document.getElementById('changeBox');
-
-  if (total === 0 && received === 0) { box.className=''; box.textContent=''; return; }
 
   if (diff < 0) {
-    box.className='change-red';
-    box.innerHTML='<strong>Money owed:</strong> $'+Math.abs(diff).toFixed(2);
+    moneyOwed.style.color = "red";
+    moneyOwed.textContent = `Money Owed: $${Math.abs(diff).toFixed(2)}`;
+    changeSection.style.display = "none";
   } else {
-    box.className='change-green';
-    box.innerHTML='<strong>Change:</strong> $'+diff.toFixed(2);
+    moneyOwed.style.color = "green";
+    moneyOwed.textContent = `Change Due: $${diff.toFixed(2)}`;
+    if (diff > 0) showChangeBreakdown(diff);
+    else changeSection.style.display = "none";
   }
 }
 
-function clearAll() {
-  document.querySelectorAll('input[type="number"]').forEach(i => i.value='');
-  document.getElementById('total').textContent='Total: $0.00';
-  const box=document.getElementById('changeBox');
-  box.className=''; box.textContent='';
+function showChangeBreakdown(amount) {
+  const denominations = [
+    { value: 20.0, label: "$20", svg: '<svg class="svg-money" viewBox="0 0 100 50"><rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/><text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$20</text></svg>' },
+    { value: 10.0, label: "$10", svg: '<svg class="svg-money" viewBox="0 0 100 50"><rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/><text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$10</text></svg>' },
+    { value: 5.0, label: "$5", svg: '<svg class="svg-money" viewBox="0 0 100 50"><rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/><text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$5</text></svg>' },
+    { value: 1.0, label: "$1", svg: '<svg class="svg-money" viewBox="0 0 100 50"><rect width="100" height="50" fill="green" stroke="black" stroke-width="2"/><text x="50" y="30" text-anchor="middle" fill="white" font-size="20">$1</text></svg>' },
+    { value: 0.25, label: "25¢", svg: '<span class="coin quarter">25¢</span>' },
+    { value: 0.10, label: "10¢", svg: '<span class="coin dime">10¢</span>' },
+    { value: 0.05, label: "5¢", svg: '<span class="coin nickel">5¢</span>' },
+    { value: 0.01, label: "1¢", svg: '<span class="coin penny">1¢</span>' },
+  ];
+
+  let remaining = Math.round(amount * 100);
+  changeBreakdown.innerHTML = "";
+  denominations.forEach(d => {
+    const count = Math.floor(remaining / Math.round(d.value * 100));
+    if (count > 0) {
+      remaining -= count * Math.round(d.value * 100);
+      const div = document.createElement("div");
+      div.innerHTML = `${d.svg} × ${count}`;
+      changeBreakdown.appendChild(div);
+    }
+  });
+
+  changeSection.style.display = "block";
 }
 
-document.querySelectorAll('input[type="number"]').forEach(el=>{
-  el.addEventListener('input', calculateChange);
+document.querySelectorAll("input").forEach(i => i.addEventListener("input", calculateChangeDue));
+clearAll.addEventListener("click", () => {
+  document.querySelectorAll("table input").forEach(i => i.value = "");
+  totalDisplay.textContent = "Total: $0.00";
+  moneyOwed.style.color = "red";
+  moneyOwed.textContent = "Money Owed: $0.00";
+  changeSection.style.display = "none";
 });
-clearAll();
 </script>
+
 </body>
 </html>
